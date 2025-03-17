@@ -17,11 +17,11 @@ setup(
         "python-dotenv>=1.0.0",
     ],
     author="AI Developer",
-    author_email="ai.developer@example.com",
+    author_email="zombitx64@gmail.com",
     description="A RAG system using Chain-of-Note technique to reduce hallucinations",
     long_description=open("README.md").read(),
     long_description_content_type="text/markdown",
-    url="https://github.com/example/chain-of-note-rag",
+    url="https://github.com/JonusNattapong/Chain-of-Note",
     classifiers=[
         "Programming Language :: Python :: 3",
         "License :: OSI Approved :: MIT License",

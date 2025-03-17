@@ -7,10 +7,10 @@ This guide provides step-by-step instructions to get started with the Chain-of-N
 1.  Clone the repository:
 
     ```bash
-    git clone https://github.com/your-username/chain-of-note.git  
+    git clone https://github.com/JonusNattapong/Chain-of-Note  
     cd chain-of-note
     ```
-    Replace `https://github.com/your-username/chain-of-note.git` with the actual repository URL.
+    Replace `https://github.com/JonusNattapong/Chain-of-Note` with the actual repository URL.
 
 2.  Install the required packages:
 
@@ -58,7 +58,7 @@ for doc in response["context"]:
 
 ## System Workflow
 
-![Workflow](public/image.png)
+![Workflow](/public/image.png)
 
 ## Key Components
 

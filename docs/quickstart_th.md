@@ -7,11 +7,11 @@
 1.  โคลนรีพอสิทอรี:
 
     ```bash
-    git clone https://github.com/your-username/chain-of-note.git
+    git clone https://github.com/JonusNattapong/Chain-of-Note
     cd chain-of-note
     ```
 
-    แทนที่ `https://github.com/your-username/chain-of-note.git` ด้วย URL ของรีพอสิทอรีจริง
+    แทนที่ `https://github.com/JonusNattapong/Chain-of-Note` ด้วย URL ของรีพอสิทอรีจริง
 
 2.  ติดตั้งแพ็คเกจที่จำเป็น:
 
@@ -86,6 +86,10 @@ python examples/demo.py
 ## การใช้งานขั้นสูง
 
 ไฟล์ `src/advanced_techniques.py` มีตัวอย่างรูปแบบการใช้งานขั้นสูงเพิ่มเติม ไดเรกทอรี `examples/` มีตัวอย่างเพิ่มเติม รวมถึงบทแนะนำ Jupyter Notebook (`jupyter_tutorial.ipynb`) และตัวอย่างการใช้งานจริง (`real_world_example.py`)
+
+## System Workflow
+
+![Workflow](/public/image.png)
 
 ## การอ่านเพิ่มเติม
 

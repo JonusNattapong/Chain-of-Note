@@ -33,27 +33,7 @@ The system operates in the following steps:
 
 ## Workflow Diagram
 
-```mermaid
-graph TD
-    User[User Query] --> RAG[ChainOfNoteRAG System]
-    
-    subgraph RAG System
-        RAG --> |1. Embed Query| EM[Embedding Model]
-        EM --> |2. Get Query Embedding| DS[Document Store]
-        DS --> |3. Retrieve Top-K Docs| CN[Chain-of-Note]
-        CN --> |4. Generate Notes| Notes[Generated Notes]
-        Notes --> |5. Final Response| Response[Response Generation]
-    end
-    
-    subgraph Document Processing
-        Doc[Documents] --> |Load| DL[Document Loader]
-        DL --> |Chunk| Chunks[Document Chunks]
-        Chunks --> |Embed| EM2[Embedding Model]
-        EM2 --> |Store| DS
-    end
-    
-    Response --> User2[User]
-```
+https://www.mermaidchart.com/raw/7c1afbd8-24c8-4681-9a80-a877bebd1b63?theme=light&version=v0.1&format=svg
 
 ## Components in Detail
 

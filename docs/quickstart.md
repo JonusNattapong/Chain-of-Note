@@ -56,6 +56,10 @@ for doc in response["context"]:
 
 ```
 
+## System Workflow
+
+![Workflow](public/image.png)
+
 ## Key Components
 
 The Chain-of-Note RAG system consists of the following key components:
@@ -90,4 +94,8 @@ The `src/advanced_techniques.py` file contains examples of more advanced usage p
 
 *   **Examples:** The `examples/` directory contains additional examples, including a Jupyter Notebook tutorial (`jupyter_tutorial.ipynb`), a real-world example (`real_world_example.py`), and a demo script (`demo.py`).
 *   **API Reference:** For detailed API information, explore the source code directly, particularly the `src/` directory.
-* **Comparison:** The `examples/comparison.py` and `src/evaluation.py` files contain benchmarks against standard RAG.
+*   **Comparison:** The `examples/comparison.py` and `src/evaluation.py` files contain benchmarks against standard RAG.
+
+## See Also
+* [System Guide](system_guide.md)
+* [API Reference](api_reference.md)

@@ -7,10 +7,14 @@ import numpy as np
 from typing import List, Dict, Union, Optional
 from sentence_transformers import SentenceTransformer
 from transformers import AutoTokenizer, AutoModel
+from mistral import MistralClient
 from dotenv import load_dotenv
 
 # Load environment variables
 load_dotenv()
+
+# Initialize Mistral client if API key is available
+MISTRAL_API_KEY = os.getenv("MISTRAL_API_KEY")
 
 class EmbeddingModel:
     """Base class for embedding models."""
@@ -120,6 +124,44 @@ class HuggingFaceEmbeddings(EmbeddingModel):
         
     def embed_query(self, query: str) -> np.ndarray:
         """Generate embedding for a query using Hugging Face model.
+        
+        Args:
+            query: Query text
+            
+        Returns:
+            Query embedding
+        """
+        return self.embed_documents([query])[0]
+
+class MistralEmbeddings(EmbeddingModel):
+    """Embeddings using Mistral AI API."""
+    
+    def __init__(self):
+        """Initialize with Mistral AI client."""
+        if not MISTRAL_API_KEY:
+            raise ValueError("MISTRAL_API_KEY not found in environment variables. Please set it in .env file.")
+        self.client = MistralClient(api_key=MISTRAL_API_KEY)
+        
+    def embed_documents(self, documents: List[str]) -> np.ndarray:
+        """Generate embeddings for documents using Mistral AI.
+        
+        Args:
+            documents: List of document texts
+            
+        Returns:
+            Document embeddings
+        """
+        embeddings = []
+        for doc in documents:
+            response = self.client.embeddings(
+                model="mistral-embed",
+                input=doc
+            )
+            embeddings.append(response.data[0].embedding)
+        return np.array(embeddings)
+        
+    def embed_query(self, query: str) -> np.ndarray:
+        """Generate embedding for a query using Mistral AI.
         
         Args:
             query: Query text

@@ -140,12 +140,30 @@ def main():
 
         # Model configuration
         st.sidebar.header("Model Configuration")
-        embedding_options = [
-            "sentence-transformers/all-mpnet-base-v2", 
-            "sentence-transformers/all-MiniLM-L6-v2",
-            "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2"
-        ]
-        embedding_model_name = st.sidebar.selectbox("Embedding Model", embedding_options, index=1)
+        
+        # API Configuration
+        st.sidebar.subheader("API Configuration")
+        api_provider = st.sidebar.selectbox(
+            "Embedding Provider",
+            ["HuggingFace", "Mistral AI"],
+            index=0
+        )
+
+        if api_provider == "HuggingFace":
+            embedding_options = [
+                "sentence-transformers/all-mpnet-base-v2",
+                "sentence-transformers/all-MiniLM-L6-v2",
+                "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2"
+            ]
+            embedding_model_name = st.sidebar.selectbox("Embedding Model", embedding_options, index=1)
+            hf_token = st.sidebar.text_input("HuggingFace Token", type="password")
+            if hf_token:
+                os.environ["HUGGINGFACE_TOKEN"] = hf_token
+        else:  # Mistral AI
+            mistral_token = st.sidebar.text_input("Mistral API Key", type="password")
+            if mistral_token:
+                os.environ["MISTRAL_API_KEY"] = mistral_token
+            embedding_model_name = "mistral-embed"  # Mistral's default embedding model
 
         llm_options = ["google/flan-t5-large", "google/flan-t5-base", "google/flan-t5-small"]
         llm_model_name = st.sidebar.selectbox("Language Model", llm_options, index=2)
@@ -387,8 +405,19 @@ def main():
         if init_button:
             with st.spinner("Initializing models..."):
                 try:
-                    embedding_model = SentenceTransformerEmbeddings(model_name=embedding_model_name)
-                    
+                    # Initialize embedding model based on selected provider
+                    if api_provider == "HuggingFace":
+                        if not os.getenv("HUGGINGFACE_TOKEN"):
+                            st.sidebar.error("Please enter your HuggingFace token")
+                            return
+                        embedding_model = SentenceTransformerEmbeddings(model_name=embedding_model_name)
+                    else:  # Mistral AI
+                        if not os.getenv("MISTRAL_API_KEY"):
+                            st.sidebar.error("Please enter your Mistral API key")
+                            return
+                        from src.embeddings import MistralEmbeddings
+                        embedding_model = MistralEmbeddings()
+
                     if use_enhanced:
                         chain_of_note = EnhancedChainOfNote(
                             model_name=llm_model_name,

@@ -1,11 +1,16 @@
 """
 Embedding models for semantic document retrieval.
 """
+import os
 import torch
 import numpy as np
 from typing import List, Dict, Union, Optional
 from sentence_transformers import SentenceTransformer
 from transformers import AutoTokenizer, AutoModel
+from dotenv import load_dotenv
+
+# Load environment variables
+load_dotenv()
 
 class EmbeddingModel:
     """Base class for embedding models."""
@@ -41,7 +46,10 @@ class SentenceTransformerEmbeddings(EmbeddingModel):
         Args:
             model_name: Name of the sentence transformer model
         """
-        self.model = SentenceTransformer(model_name)
+        token = os.getenv("HUGGINGFACE_TOKEN")
+        if not token:
+            raise ValueError("HUGGINGFACE_TOKEN not found in environment variables. Please set it in .env file.")
+        self.model = SentenceTransformer(model_name, token=token)
         
     def embed_documents(self, documents: List[str]) -> np.ndarray:
         """Generate embeddings for documents using Sentence Transformer.

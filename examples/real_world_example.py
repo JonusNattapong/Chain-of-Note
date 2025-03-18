@@ -10,7 +10,7 @@ from tqdm import tqdm
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from src.data_loader import DocumentLoader
-from src.embeddings import SentenceTransformerEmbeddings
+from src.embeddings import SentenceTransformerEmbeddings, MistralEmbeddings
 from src.document_store import DocumentStore
 from src.chain_of_note import ChainOfNote
 from src.rag_system import ChainOfNoteRAG
@@ -51,7 +51,15 @@ def run_real_world_example():
     
     # Step 1: Initialize the RAG system
     print("Initializing the RAG system...")
-    embedding_model = SentenceTransformerEmbeddings()
+    
+    # Try Mistral embeddings first, fallback to HuggingFace
+    try:
+        print("Attempting to use Mistral AI embeddings...")
+        embedding_model = MistralEmbeddings()
+    except (ValueError, ImportError):
+        print("Falling back to HuggingFace embeddings...")
+        embedding_model = SentenceTransformerEmbeddings()
+    
     rag_system = ChainOfNoteRAG(embedding_model=embedding_model)
     
     # Step 2: Fetch data from Wikipedia

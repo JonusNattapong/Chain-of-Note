@@ -16,7 +16,7 @@ setup(
         "tqdm>=4.65.0",
         "python-dotenv>=1.0.0",
     ],
-    author="AI Developer",
+    author="๋JonusNattapong-zombitx64",
     author_email="zombitx64@gmail.com",
     description="A RAG system using Chain-of-Note technique to reduce hallucinations",
     long_description=open("README.md").read(),

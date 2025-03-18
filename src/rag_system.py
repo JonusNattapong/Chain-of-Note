@@ -5,81 +5,65 @@ from typing import List, Dict, Any, Optional, Tuple
 import numpy as np
 
 from .data_loader import DocumentLoader
-from .embeddings import EmbeddingModel, SentenceTransformerEmbeddings
+from .embeddings import EmbeddingModel, SentenceTransformerEmbeddings, MistralEmbeddings
 from .document_store import DocumentStore
-from .chain_of_note import ChainOfNote
+from .chain_of_note import ChainOfNote, MistralAIChat
+
 
 class ChainOfNoteRAG:
-    """Complete RAG system with Chain-of-Note."""
-    
-    def __init__(
-        self, 
-        embedding_model: Optional[EmbeddingModel] = None,
-        llm_model_name: str = "google/flan-t5-large"
-    ):
-        """Initialize the RAG system.
-        
+    """RAG system using Chain-of-Note."""
+
+    def __init__(self, embedding_model_name="sentence-transformers/all-mpnet-base-v2", use_mistral_embeddings=False, llm_model_name="google/flan-t5-large", use_mistral_llm=False, chain_of_note=None):
+        """Initialize with embedding model and Chain-of-Note instance.
+
         Args:
-            embedding_model: Model for generating document embeddings
-            llm_model_name: Name of the language model for generation
+            embedding_model_name: Name of the embedding model to use.
+            use_mistral_embeddings: Whether to use Mistral AI for embeddings.
+            llm_model_name: Name of the language model to use for Chain-of-Note.
+            use_mistral_llm: Whether to use Mistral AI for the Chain-of-Note language model.
+            chain_of_note: Optional pre-configured ChainOfNote instance.
         """
-        self.embedding_model = embedding_model or SentenceTransformerEmbeddings()
+        if use_mistral_embeddings:
+            self.embedding_model = MistralEmbeddings()
+        else:
+            self.embedding_model = SentenceTransformerEmbeddings(model_name=embedding_model_name)
+
         self.document_store = DocumentStore()
-        self.chain_of_note = ChainOfNote(model_name=llm_model_name)
-        
+
+        if chain_of_note:
+            self.chain_of_note = chain_of_note
+        else:
+            self.chain_of_note = ChainOfNote(model_name=llm_model_name, use_mistral=use_mistral_llm)
+
+
     def add_documents(self, documents: List[Dict]) -> None:
-        """Add documents to the RAG system.
-        
-        Args:
-            documents: List of document dictionaries with "content" field
-        """
+        """Add documents to the RAG system."""
         contents = [doc["content"] for doc in documents]
         embeddings = self.embedding_model.embed_documents(contents)
         self.document_store.add_documents(documents, embeddings)
-        
+
     def process_documents_from_loader(self, loader: DocumentLoader, chunk_size: int = 500) -> None:
-        """Process documents from a document loader.
-        
-        Args:
-            loader: DocumentLoader containing documents
-            chunk_size: Size of document chunks
-        """
+        """Process documents from a document loader."""
         chunks = loader.create_chunks(chunk_size=chunk_size)
         self.add_documents(chunks)
-        
+
     def query(
-        self, 
-        query: str, 
-        top_k: int = 5, 
+        self,
+        query: str,
+        top_k: int = 5,
         return_context: bool = False,
         return_notes: bool = False
     ) -> Dict[str, Any]:
-        """Process a query through the RAG system.
-        
-        Args:
-            query: User query
-            top_k: Number of documents to retrieve
-            return_context: Whether to include retrieved documents in response
-            return_notes: Whether to include generated notes in response
-            
-        Returns:
-            Response with answer and optionally context and notes
-        """
-        # Get query embedding
+        """Process a query through the RAG system."""
         query_embedding = self.embedding_model.embed_query(query)
-        
-        # Retrieve relevant documents
         retrieved_docs = self.document_store.search(query_embedding, top_k=top_k)
-        
-        # Generate response using Chain-of-Note
         response = self.chain_of_note.generate_response(
             query=query,
             documents=retrieved_docs,
             return_notes=return_notes
         )
-        
-        # Add retrieved context if requested
+
         if return_context:
             response["context"] = retrieved_docs
-            
+
         return response

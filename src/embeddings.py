@@ -7,7 +7,7 @@ import numpy as np
 from typing import List, Dict, Union, Optional
 from sentence_transformers import SentenceTransformer
 from transformers import AutoTokenizer, AutoModel
-from mistral import MistralClient
+from mistralai.client import MistralClient
 from dotenv import load_dotenv
 
 # Load environment variables

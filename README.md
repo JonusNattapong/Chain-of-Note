@@ -5,9 +5,7 @@
 [![HuggingFace](https://img.shields.io/badge/🤗-HuggingFace-yellow)](https://huggingface.co/)
 [![Mistral AI](https://img.shields.io/badge/🚀-Mistral%20AI-blue)](https://mistral.ai/)
 
-<div align="center">
-  <img src="public/diagram.png" alt="Chain-of-Note Architecture" width="600"/>
-</div>
+
 
 > 🌟 โปรเจกต์นี้เป็นการนำเสนอระบบ Retrieval-Augmented Generation (RAG) ที่ใช้เทคนิค Chain-of-Note เพื่อลดอาการ Hallucination ในการตอบสนองที่สร้างโดย AI
 

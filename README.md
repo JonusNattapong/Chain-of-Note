@@ -138,7 +138,7 @@ python web.py
 @software{chain_of_note_rag,
   author = {zombitx64},
   title = {Chain-of-Note RAG System},
-  year = {2025},
+  year = {2023},
   url = {https://github.com/JonusNattapong/Chain-of-Note}
 }
 ```

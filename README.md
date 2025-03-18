@@ -5,7 +5,6 @@
 [![HuggingFace](https://img.shields.io/badge/🤗-HuggingFace-yellow)](https://huggingface.co/)
 [![Mistral AI](https://img.shields.io/badge/🚀-Mistral%20AI-blue)](https://mistral.ai/)
 
-
 > 🌟 โปรเจกต์นี้เป็นการนำเสนอระบบ Retrieval-Augmented Generation (RAG) ที่ใช้เทคนิค Chain-of-Note เพื่อลดอาการ Hallucination ในการตอบสนองที่สร้างโดย AI
 
 ## 📑 สารบัญ
@@ -118,82 +117,82 @@ python web.py
 
 ระบบได้รวมการทำงานกับ Mistral AI API เพื่อเพิ่มความสามารถในการประมวลผลภาษาธรรมชาติ:
 
-### แผนภาพการทำงาน
+### Workflow Diagram
 ```mermaid
 mindmap
   root((Mistral AI Integration))
     Embeddings
-      นำเข้าข้อความ
-      ใช้ฟังก์ชัน get_embeddings
-        เรียกใช้ Mistral API (mistral-embed)
-        คืนค่าเวกเตอร์ embedding
+      Input text
+      get_embeddings function
+        Call Mistral API (mistral-embed)
+        Return embedding vectors
     OCR
-      นำเข้า URL เอกสาร
-      ใช้ฟังก์ชัน process_ocr
-        เรียกใช้ Mistral API (mistral-ocr-latest)
-        คืนค่าผลลัพธ์ OCR (ข้อความและรูปภาพ)
+      Input document URL
+      process_ocr function
+        Call Mistral API (mistral-ocr-latest)
+        Return OCR results
     Agent Completions
-      นำเข้าข้อความสนทนา
-      ใช้ฟังก์ชัน get_agent_completion
-        เรียกใช้ Mistral API (mistral-large-latest)
-        คืนค่าข้อความตอบกลับ
+      Input conversation messages
+      get_agent_completion function
+        Call Mistral API (mistral-large-latest)
+        Return generated response
 ```
 
-### โครงสร้างการทำงาน
+### Architecture Diagram
 ```mermaid
 flowchart TB
-    subgraph ผู้ใช้งาน
-        UI[โค้ดหรือผู้ใช้]
+    subgraph Client
+        UI[User/Code]
     end
 
-    subgraph การเชื่อมต่อ_Mistral_AI
+    subgraph Integration
         API[mistral_integration.py]
     end
     
-    subgraph ภายนอก
+    subgraph External
         MAPI[Mistral AI API]
     end
     
-    UI -->|เรียกใช้ฟังก์ชัน| API
-    API -->|ส่งคำขอ API| MAPI
-    MAPI -->|ส่งผลลัพธ์| API
+    UI -->|Function Calls| API
+    API -->|API Requests| MAPI
+    MAPI -->|API Responses| API
     
-    classDef user fill:#f9d3a7,stroke:#333,stroke-width:1px
+    classDef client fill:#f9d3a7,stroke:#333,stroke-width:1px
     classDef integration fill:#a7c7f9,stroke:#333,stroke-width:1px
     classDef external fill:#f9a7a7,stroke:#333,stroke-width:1px
 
-    class ผู้ใช้งาน user
-    class การเชื่อมต่อ_Mistral_AI integration
-    class ภายนอก external
+    class Client client
+    class Integration integration
+    class External external
 ```
 
-### ลำดับการทำงาน
+### Data Flow Sequence
 ```mermaid
 sequenceDiagram
-    actor ผู้ใช้
+    actor User
     participant Script as mistral_integration.py
     participant Mistral as Mistral AI API
 
     %% Embedding Flow
-    ผู้ใช้->>Script: เรียก get_embeddings()
-    Script->>Mistral: ขอ embeddings
-    Mistral-->>Script: ส่ง embeddings
-    Script-->>ผู้ใช้: คืนค่า embeddings
+    User->>Script: Call get_embeddings()
+    Script->>Mistral: Request embeddings
+    Mistral-->>Script: Return embeddings
+    Script-->>User: Return embeddings
 
     %% OCR Flow
-    ผู้ใช้->>Script: เรียก process_ocr()
-    Script->>Mistral: ขอผล OCR
-    Mistral-->>Script: ส่งผล OCR
-    Script-->>ผู้ใช้: คืนค่าผล OCR
+    User->>Script: Call process_ocr()
+    Script->>Mistral: Request OCR
+    Mistral-->>Script: Return OCR result
+    Script-->>User: Return OCR result
 
     %% Agent Completion Flow
-    ผู้ใช้->>Script: เรียก get_agent_completion()
-    Script->>Mistral: ขอการตอบกลับ
-    Mistral-->>Script: ส่งการตอบกลับ
-    Script-->>ผู้ใช้: คืนค่าการตอบกลับ
+    User->>Script: Call get_agent_completion()
+    Script->>Mistral: Request completion
+    Mistral-->>Script: Return completion
+    Script-->>User: Return completion
 ```
 
-### องค์ประกอบระบบ
+### Component Hierarchy
 ```mermaid
 graph TD
     A[Mistral AI Integration] --> B[mistral_integration.py]

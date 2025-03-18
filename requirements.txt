@@ -8,6 +8,7 @@ torchvision>=0.17.0  # Updated for compatibility
 torchaudio>=2.2.0  # Updated for compatibility
 numpy>=1.24.0
 pandas>=2.0.0
+mistral>=0.0.7  # Mistral AI client
 
 # RAG and Language Processing
 langchain>=0.0.267
